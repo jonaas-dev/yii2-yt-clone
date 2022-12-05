@@ -4,26 +4,8 @@ Font : https://www.youtube.com/watch?v=whuIf33v2Ug
 
 ## :rocket: INSTALL NECESSARY TOOLS
 
-1) XAMPP - https://www.apachefriends.org/index.html
-    ```
-    sudo wget https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.1.6/xampp-linux-x64-8.1.6-0-installer.run
-
-    sudo chmod 755 [package_name]
-    sudo ./[package_name]
-
-    sudo /opt/lampp/lampp start
-    ```
-2) COMPOSER - https://getcomposer.org/download/
-    ```
-    sudo apt install wget php-cli php-zip unzip
-    wget -O composer-setup.php https://getcomposer.org/installer
-    sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-    sudo composer self-update 
-    ```
-
-Project paths: 
-- http://freecodetube.test/
-- http://studio.freecodetube.test/
+1) Xampp ([click](https://www.apachefriends.org/index.html)).
+2) Composer ([click](https://getcomposer.org/download/)).
 
 ## :gear: PROJECT SETUP
 
@@ -37,9 +19,13 @@ Project paths:
     - Config file hosts
     - open IDE
     - php init
+        ```bash
+        # from project
+        /opt/lampp/bin/php init
         ```
-        /opt/lampp/htdocs/FreeCodeTube$ /opt/lampp/bin/php init
-        ```
+3) Paths:
+    - http://freecodetube.test/ 
+    - http://studio.freecodetube.test/
 
 ## :pick: CREATE DB AND RUN SCRIPT MIGRATION
 1) crear db (phpmyadmin)
