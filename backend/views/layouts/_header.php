@@ -16,9 +16,9 @@ if (Yii::$app->user->isGuest) {
 } else {
     $menuItems[] = [
         'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-        'url' => ['site/logout'],
+        'url' => ['/site/logout'],
         'linkOptions' => [
-            'data-method' => 'POST'
+            'data-method' => 'post'
         ]
     ];
 }

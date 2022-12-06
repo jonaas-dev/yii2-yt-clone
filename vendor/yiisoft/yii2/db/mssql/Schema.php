@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\db\mssql;
@@ -394,9 +394,9 @@ SQL;
             }
             if (!empty($matches[2])) {
                 $values = explode(',', $matches[2]);
-                $column->size = $column->precision = (int)$values[0];
+                $column->size = $column->precision = (int) $values[0];
                 if (isset($values[1])) {
-                    $column->scale = (int)$values[1];
+                    $column->scale = (int) $values[1];
                 }
                 if ($column->size === 1 && ($type === 'tinyint' || $type === 'bit')) {
                     $column->type = 'boolean';

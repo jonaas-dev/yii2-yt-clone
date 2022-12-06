@@ -51,6 +51,7 @@ Domains:
 # add vhost in /opt/lampp/etc/extra/httpd-vhosts.conf (linux)
 ```
 <details>
+    <summary>For linux</summary>
 
 ```
 <VirtualHost *:80>
@@ -108,6 +109,66 @@ Domains:
 
 </details>
 
+<details>
+    <summary>For windows</summary>
+
+```
+    <VirtualHost *:80>
+        ServerName freecodetube.test
+        DocumentRoot "C:\xampp\htdocs/yii2-yt-clone\frontend\web"
+            
+        <Directory "C:\xampp\htdocs/yii2-yt-clone\frontend\web">
+            # use mod_rewrite for pretty URL support
+            RewriteEngine on
+            # If a directory or a file exists, use the request directly
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            # Otherwise forward the request to index.php
+            RewriteRule . index.php
+
+            # use index.php as index file
+            DirectoryIndex index.php
+
+            # ...other settings...
+            # Apache 2.4
+            Require all granted
+                
+            ## Apache 2.2
+            # Order allow,deny
+            # Allow from all
+        </Directory>
+    </VirtualHost>
+        
+    <VirtualHost *:80>
+        ServerName studio.freecodetube.test
+        DocumentRoot "C:\xampp\htdocs/yii2-yt-clone\backend\web"
+            
+        <Directory "C:\xampp\htdocs/yii2-yt-clone\frontend\web">
+            # use mod_rewrite for pretty URL support
+            RewriteEngine on
+            # If a directory or a file exists, use the request directly
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            # Otherwise forward the request to index.php
+            RewriteRule . index.php
+
+            # use index.php as index file
+            DirectoryIndex index.php
+
+            # ...other settings...
+            # Apache 2.4
+            Require all granted
+                
+            ## Apache 2.2
+            # Order allow,deny
+            # Allow from all
+        </Directory>
+    </VirtualHost>
+```
+
+</details>
+
+
 ### Config file hosts
 
 
@@ -134,14 +195,116 @@ Jugant amb windows i wls:
 
 ```bash
 # from project
+
+# In linux
 /opt/lampp/bin/php init
+
+# In windows
+C:\xampp\php\php init
 ```
 
 ## :pick: CREATE DB AND RUN SCRIPT MIGRATION
-1) crear db (phpmyadmin)
+1) crear db (phpmyadmin). dbname: `yii2advanced`
 2) migrate
     ```bash
-    /opt/lampp/htdocs/FreeCodeTube$ sudo /opt/lampp/bin/php yii migrate
+    /opt/lampp/htdocs/yii2-yt-clone$ sudo /opt/lampp/bin/php yii migrate
     # special file – contains the all change of db.
     ```
 
+## :man::woman: SIGN UP – ACTIVATE ACCOUNT AND LOGIN
+
+1) Do sign-up
+2) Go to frontendd/runtime/mail
+3) Look a file!
+
+    look this strange path:
+    `http:/=
+    /freecodetube.test/index.php?r=3Dsite%2Fverify-email&token=3D-q68Eli_TGK4I7=
+    kNN5LGGbEpyH3Ais4t_1627751447`
+
+    repare:
+    `http://freecodetube.test/index.php?r=site%2Fverify-email&token=-q68Eli_TGK4I7kNN5LGGbEpyH3Ais4t_1627751447`
+
+    Result: 
+    `Your email has been confirmed!`
+
+4) Go to browse!
+
+## Change URL format
+
+Ugly: `studio.freecodetube.test/index.php?r=site%2Findex`
+
+Good: `http://freecodetube.test/site/login`
+
+### Descomentar urlManager
+- backend/main.php
+- frontend/main.php
+
+## EXPLORE PROJECT STRUCTURE 6 ENTRY SCRIPT
+...
+
+## CONFIG FILES
+...
+
+## CONTROLLERS & ACTIONS
+...
+
+## VIEWS
+index.php (front) (back)
+
+common conte els documents que utilitzen tant back com front.
+
+Created application instance … app($config).run()
+
+:warning: Estandard, dins de views tenim per exemple la carpeta `site` que fa referencia al controlador `SideController`.
+
+## INSTALL BOOTSTRAP 4
+## ASSET BUNDLES
+
+```
+composer require yiisoft/yii2-bootstrap4
+```
+```
+composer remove yiisoft/yii2-bootstrap
+``` 
+
+registred all js and css class
+
+## LAYOUTS
+...
+
+## APPLICATION PROPERTIES
+...
+
+## NAVBAR WIDGET
+...
+
+## COMPONENTS
+...
+
+## NAV WIDGET
+...
+
+## IDENTITY CLASS
+...
+
+## ACTIVE RECORD CLASS
+...
+
+## BEHAVIORS
+...
+
+## FINISH STUDIO LAYOUT
+...
+
+## URL CREATION
+...
+
+## MORE ON LAYOUTS
+...
+
+## FINISH STUDIO LAYOUT
+
+## CREATE AUTH LAYOUT (NESTED LAYOUTS)
+
+## ALIASES
