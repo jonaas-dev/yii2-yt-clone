@@ -13,7 +13,7 @@ use yii\bootstrap4\ActiveForm;
 <div class="video-form">
 
     <?php $form = ActiveForm::begin([
-            'options' => ['enctype' => 'multipart/form-data']
+        'options' => ['enctype' => 'multipart/form-data']
     ]); ?>
 
     <div class="row">
@@ -34,16 +34,14 @@ use yii\bootstrap4\ActiveForm;
             </div>
 
             <?= $form->field($model, 'tags', [
-                    'inputOptions' => ['data-role' => 'tagsinput']
+                'inputOptions' => ['data-role' => 'tagsinput']
             ])->textInput(['maxlength' => true]) ?>
 
         </div>
         <div class="col-sm-4">
 
             <div class="embed-responsive embed-responsive-16by9 mb-3">
-                <video class="embed-responsive-item"
-                       poster="<?php echo $model->getThumbnailLink() ?>"
-                       src="<?php echo $model->getVideoLink() ?>" controls></video>
+                <video class="embed-responsive-item" poster="<?php echo $model->getThumbnailLink() ?>" src="<?php echo $model->getVideoLink() ?>" controls></video>
             </div>
 
             <div class="mb-3">

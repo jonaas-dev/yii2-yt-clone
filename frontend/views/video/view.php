@@ -17,9 +17,8 @@ use yii\widgets\Pjax;
 <div class="row">
     <div class="col-sm-8">
         <div class="embed-responsive embed-responsive-16by9">
-            <video class="embed-responsive-item"
-                   poster="<?php echo $model->getThumbnailLink() ?>"
-                   src="<?php echo $model->getVideoLink() ?>" controls></video>
+            <video class="embed-responsive-item" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" src="<?php echo $model->getVideoLink() ?>" controls>
+            </video>
         </div>
         <h6 class="mt-2"><?php echo $model->title ?></h6>
         <div class="d-flex justify-content-between align-items-center">
@@ -52,14 +51,9 @@ use yii\widgets\Pjax;
                 <div class="media">
                     <img class="mr-3 comment-avatar" src="/img/avatar.svg" alt="">
                     <div class="media-body">
-                        <form id="create-comment-form" method="post"
-                              action="<?php echo Url::to(['/comment/create/']) ?>" data-pjax="1">
+                        <form id="create-comment-form" method="post" action="<?php echo Url::to(['/comment/create/']) ?>" data-pjax="1">
                             <input type="hidden" name="video_id" value="<?php echo $model->video_id ?>">
-                            <textarea id="leave-comment" rows="1"
-                                      class="form-control"
-                                      name="comment"
-                                      placeholder="Add a public comment"
-                            >
+                            <textarea id="leave-comment" rows="1" class="form-control" name="comment" placeholder="Add a public comment">
                             </textarea>
                             <div class="action-buttons text-right mt-2">
                                 <button type="button" id="cancel-comment" class="btn btn-light">Cancel</button>
@@ -72,21 +66,19 @@ use yii\widgets\Pjax;
             <div id="comments-wrapper" class="comments-wrapper">
                 <?php foreach ($comments as $comment) {
                     echo $this->render('_comment_item', [
-                            'model' => $comment
+                        'model' => $comment
                     ]);
                 } ?>
             </div>
         </div>
     </div>
     <div class="col-sm-4">
-        <?php foreach ($similarVideos as $similarVideo): ?>
+        <?php foreach ($similarVideos as $similarVideo) : ?>
             <div class="media mb-3">
                 <a href="<?php echo Url::to(['/video/view', 'id' => $similarVideo->video_id]) ?>">
-                    <div class="embed-responsive embed-responsive-16by9 mr-2"
-                         style="width: 120px">
-                        <video class="embed-responsive-item"
-                               poster="<?php echo $similarVideo->getThumbnailLink() ?>"
-                               src="<?php echo $similarVideo->getVideoLink() ?>"></video>
+                    <div class="embed-responsive embed-responsive-16by9 mr-2" style="width: 120px">
+                        <video class="embed-responsive-item" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" src="<?php echo $similarVideo->getVideoLink() ?>">
+                        </video>
                     </div>
                 </a>
                 <div class="media-body">

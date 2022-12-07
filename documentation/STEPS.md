@@ -811,26 +811,89 @@ Create two files in `common\mail`:
 
 
 ## SEARCH
+```bash
 /opt/lampp/bin/php yii migrate/create create_fulltext_index_on_video
+```
 
+Add content in migratioFile:
+```php
+/**
+ * {@inheritdoc}
+ */
+public function safeUp()
+{
+    $this->execute("ALTER TABLE {{%video}} ADD FULLTEXT(title, description, tags)");
+}
+
+/**
+ * {@inheritdoc}
+ */
+public function safeDown()
+{
+    echo "m211206_150137_create_fulltext_index_on_video cannot be reverted.\n";
+
+    return false;
+}
+
+```
+
+```bash
 /opt/lampp/bin/php yii migrate
+```
 
 ## SIMILAR VIDEOS
+...
 
 ## HISTORY PAGE
 
 Fixat que la crida es complicadaa si no tenim el context al cap. Fem una join amb una TAULA VIRTUAL que representa els videos amb les seves dates maximes. Volem obtenir el historial  ...
 
 ## IMPLEMENT DASHBOARD
+...
 
 ## DEBUG BAR
 Un detall d’eficiencia: 
 es fan dues crides molt semblants per els diferents usuaris ...
 
-es podrueix perque iterem els objectes subscription i fem -> user. Per poder fer el mateix pero evitant la crida en el moment d’obtenir els subscriptors hem de fer: 
+![extra](./extra-querys.png)
+
+es podrueix perque iterem els objectes subscription i fem `->user`. Per poder fer el mateix pero evitant la crida en el moment d’obtenir els subscriptors hem de fer: 
+
+```php
+// una millora
+->select(...)
+->with(user)
+
+// unaltra millora
+Video::find()
+->with('createdBy')
+```
 
 ## RELATION EAGER LOADING
+...
 
 ## CACHING
 
+Use Example:
+```php
+    $numberOfSubscribers = Yii::$app->cache->get('subscribers-'.$userId);
+    if(!$numberOfSubscribers) {
+        $numberOfSubscribers = $user->getSubscribers()->count();
+        Yii::$app->cache->set('subscribers-'.$userId, $numberOfSubscribers);
+    }
+```
+
+
 ## OVERVIEW, CODE CLEANUP AND IMPROVEMENTS
+...
+
+# Some problemes
+
+## Your system does not support any of these drivers: gmagick,imagick,gd2
+When I try upload a poster for my video.
+
+(in win):
+https://stackoverflow.com/questions/66817677/yii2-your-system-does-not-support-any-of-these-drivers-gmagick-imagick-gd2
+
+(in linux):
+not problem.

@@ -64,6 +64,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        /** @var User $user */
         $user = Yii::$app->user->identity;
         $userId = $user->id;
 
