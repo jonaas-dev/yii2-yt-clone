@@ -55,6 +55,8 @@ class Video extends \yii\db\ActiveRecord
     {
         return [
             // created_at - updated_at
+            // When this attach to the model, 
+            // automaticaly manage this attributes
             TimestampBehavior::class,
             [
                 // created_by - updated_by
