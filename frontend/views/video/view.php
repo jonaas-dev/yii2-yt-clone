@@ -17,7 +17,7 @@ use yii\widgets\Pjax;
 <div class="row">
     <div class="col-sm-8">
         <div class="embed-responsive embed-responsive-16by9">
-            <video class="embed-responsive-item" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" poster="<?php echo $model->getThumbnailLink() ?>" src="<?php echo $model->getVideoLink() ?>" controls>
+            <video class="embed-responsive-item" poster="<?php echo $model->getThumbnailLink() ?>" src="<?php echo $model->getVideoLink() ?>" controls>
             </video>
         </div>
         <h6 class="mt-2"><?php echo $model->title ?></h6>
@@ -77,7 +77,7 @@ use yii\widgets\Pjax;
             <div class="media mb-3">
                 <a href="<?php echo Url::to(['/video/view', 'id' => $similarVideo->video_id]) ?>">
                     <div class="embed-responsive embed-responsive-16by9 mr-2" style="width: 120px">
-                        <video class="embed-responsive-item" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" poster="<?php echo $similarVideo->getThumbnailLink() ?>" src="<?php echo $similarVideo->getVideoLink() ?>">
+                        <video class="embed-responsive-item" poster="<?php echo $similarVideo->getThumbnailLink() ?>" src="<?php echo $similarVideo->getVideoLink() ?>">
                         </video>
                     </div>
                 </a>

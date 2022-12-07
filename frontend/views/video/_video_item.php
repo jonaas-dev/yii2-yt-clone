@@ -1,6 +1,6 @@
 <?php
 
-/** @var $model Video */
+/** @var $model \common\models\Video */
 
 use common\models\Video;
 use yii\helpers\Url;
