@@ -766,9 +766,48 @@ class Html
 ```
 
 ## EMAIL SEND USING MAILTRAP
-https://mailtrap.io/inboxes/1560784/messages#
 
+Fake email: https://mailtrap.io
 
+Go to:
+
+![yii-mail](./mailtrap-yii-framework.png)
+
+And paste in `main-local.php`:
+
+```php
+    'mailer' => [
+        'class' => 'yii\swiftmailer\Mailer',
+        'viewPath' => '@common/mail',
+        'transport' => [
+            'class' => 'Swift_SmtpTransport',
+            'host' => 'smtp.mailtrap.io',
+            'username' => '********',
+            'password' => '********',
+            'port' => '2525',
+            'encryption' => 'tls',
+        ],
+    ],
+```
+
+Add in `actionSubscribe`:
+```php
+    Yii::$app->mailer->compose([
+        'html' => 'subscriber-html', 
+        'text' => 'subscriber-text'
+    ], [
+        'channel' => $channel,
+        'user' => \Yii::$app->user->identity
+    ])
+    ->setFrom(Yii::$app->params['senderEmail'])
+    ->setTo($channel->email)
+    ->setSubject('You have new subscriber')
+    ->send();
+```
+
+Create two files in `common\mail`:
+- `subscriber-html.php`
+- `subscriber-text.php`
 
 
 ## SEARCH
