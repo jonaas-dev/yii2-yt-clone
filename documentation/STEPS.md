@@ -449,15 +449,349 @@ Add method `getStatusLabels()`.
 
 ## THUMBNAIL UPLOAD
 
+Get `input-group/#custom-file-input` from `bootstrap`
 
+Add public property `thumbnail` to model `Video`.
 
 ## THUMBNAIL RESIZE
 
-## HANDLE UPLOAD ERRORS
+Install:
+```
 composer require yiisoft/yii2-imagine
-Tenim que evitar que un usuari sense fer Login pugui pujar videos!
+```
+
+Add Rule to model `Video`:
+
+```php
+['thumbnail', 'image', 'minWith' => 3000]
+```
+S'aplica el validador `ImageValidator`.
+
+Com retallem l'imatge:
+```php
+Image:getImagine()
+    ->open($thumbnailPath)
+    ->thumbnail(new Box(1200, 1280))
+    ->save();
+```
+
+## HANDLE UPLOAD ERRORS
+
+Add rule:
+```php
+['video', 'file', 'extensions' => ['mp4']]
+```
 
 ## SAVE VIDEO TAGS
 Google: ”bootstrap 4 tags input”
-https://www.jqueryscript.net/form/Bootstrap-4-Tag-Input-Plugin-jQuery.html
 
+- Visit: https://www.jqueryscript.net/form/Bootstrap-4-Tag-Input-Plugin-jQuery.html
+- Download
+- Create in `backend\web\tabimput`
+- And paste `.js` and `.css`.
+- Create file `TagsInputAsset.php` in `backend\assets`
+- extends to `AssetBundle`
+- add: 
+    ```php
+    <?php
+
+    namespace backend\assets;
+
+    use yii\web\AssetBundle;
+    use yii\web\JqueryAsset;
+
+    class TagsInputAsset extends AssetBundle
+    {
+        public $basePath = '@webroot/tagsinput';
+        public $baseUrl = '@web/tagsinput';
+        public $css = [
+            'tagsinput.css',
+        ];
+        public $js = [
+            'tagsinput.js'
+        ];
+        public $depends = [
+            JqueryAsset::class
+        ];
+    }
+    ```
+
+- Go to `_form.php` and add:
+     ```php
+    \backend\assets\TagsInputAsset::register($this);
+    ```
+
+## VIDEO LISTING PAGE (GRIDVIEW 6 DATA PROVIDERS)
+
+Estem tocant el que volen i el que no en el llistat.
+
+Creem per el camp video_id un nou component (on es mostrarà el vídeo).
+El nou component: `_video_item` 
+
+Anem a `bootstrap` a per un `components\media-object`.
+
+Coses guais que fa servir: 
+```php
+StringHelper::truncateWords($model->description, 10)
+```
+
+Use for redirect when user click the video:
+```php
+Url::to(...)
+```
+
+## RESTRICT UPLOAD FOR AUTHORIZED USERS ONLY
+
+Go to `VideoController` and add in `behaviors`:
+```php
+    # Nomès serà possible fer accions d'aquest controler si l'usuari està autoritzat (ha iniciat sessió)
+    'access' => [
+        'class' => AccessControl::class,
+        'rules' => [
+            [
+                'allow' => true,
+                'roles' => ['@'] #authorize
+            ]
+        ]
+    ],
+```
+
+## IMPLEMENT FRONTEND LAYOUT
+Tenim que evitar que un usuari pugui veure els videos d’un altre :)
+
+Afegim en el `actionIndex` un filtre en el provider per retornar *els videos que ha creat l'usuari que està utilitzant la plataforma*.
+
+```php
+// millor utilitzar el andWhere que el where perquè si una subquery l'utilitza, peta!
+Video::find()
+    ->andWhere(['created_by' => Yii::$app->user->id])
+```
+Afegim en la classe `VideoQuery` per simplificar la crida anterior:
+```php
+public function creator($userId)
+{
+    return $this->andWhere(['created_by' => $userId])
+}
+
+Video::find()->creator(Yii::$app->user->id)
+
+```
+
+Afegim a més:
+```php
+public function latest()
+{
+    return $this->orderBy(['created_at' => SORT_DESC])
+}
+```
+
+:warning: Per analitzar les crides que es fan i optimitzar podem veure el log desde el debug del yii:
+
+![debug](./yii-db-debug.png)
+
+Explicació de `ActiveDataProvider` extends `BaseDataProvider`.
+
+En `BaseDataProvider` tenim:
+- public $id;
+- private $_sort;
+- private $_pagination;
+- private $_keys;
+- private $_models;
+- private $_totalCount;
+
+## VIDEO DELETE
+
+Add `ActionColumn` for to delete buttom.
+
+Afegim tota la lògica
+
+Afegim el mètode `afterDelete` en el model `Video`.
+```php
+public function afterDelete()
+{
+    parent::afterDelete();
+    $videoPath = Yii::getAlias('@frontend/web/storage/videos/' . $this->video_id . '.mp4');
+    unlink($videoPath); // remove a file
+
+    $thumbnailPath = Yii::getAlias('@frontend/web/storage/thumbs/' . $this->video_id . '.jpg');
+    if (file_exists($thumbnailPath)) {
+        unlink($thumbnailPath); // remove a file
+    }
+}
+```
+
+## OUTPUT PUBLISHER VIDEOS ON FRONTEND
+
+Create `frontend\controllers\VideoController.php`.
+- Afegim l'acció Index
+- Redefinit el path "inicial" com a `video/index`
+- En el provider de l'acció filtrem els videos publicats (no ens interessa mostrar els que no estàn publicats).
+
+Create a `frontent\views\index.php`
+- Afegim el Widget: `Listview`.
+
+Create a `video_item.php`.
+- Anem a `bootstrap` a per el component `Card`.
+
+## VIDEO VIEW PAGE
+
+- Add `anchor link` to the video view + Url::to(...)
+- Afegim `actionView`
+- Creem el document `view.php`
+
+:warning: Canvia el l'ayout desde la propia acció per amagar el meu lateral.
+
+- Anem a per icones a `www.fontawesome.com/icons` per el `like` i `dislike`.
+
+## COUNT VIDEO VIEWS
+
+:warning: We need a table:
+
+```bash
+/opt/lampp/htdocs/yii2-yt-clone$ sudo /opt/lampp/bin/php yii migrate/create create_video_view_table --fields="video_id:string(16):notNull:foreignKey(video),user_id:integer(11):foreignKey(user), created_at(11)"
+```
+
+:warning: We need create the model using `gii`.
+
+Create method:
+```php
+public function getViews() {
+    return $this->hasMany(...);
+}
+
+$model->getViews()->count();
+```
+
+## IMPLEMENT LIKE/DISLIKE
+
+:warning: We need a table:
+
+```bash
+sudo /opt/lampp/bin/php yii migrate/create create_video_like_table –fields="video_id:string(16):notNull:foreignKey(video), user_id:integer(11):notNull:foreignKey(user),type:integer(1),created_at:integer(11)"
+```
+
+:warning: We need create the model using `gii`.
+
+Implement actions `video/like` and `video/dislike`.
+
+Add in `behaviors` 
+- access, *'only' => ['like', 'dislike']* and *auth*.
+- verbs, like and dislike --> post
+
+S'implementa amb `Pjax`.
+
+Separar el codi en `_buttons.php`.
+
+Afegim les constants a VideoLike. Dislike = 0, Like = 1;
+
+En acabar el save volem retornar els buttons. :warning: 
+```php
+...
+return $this->renderAjaz('_buttons', [
+    'model' => $video
+]);
+```
+
+Evitar que l'acció `actionLike` crei mes d'una entrada si l'usuari ja ha fet like. Podem tenir una entrada de tipus "like" or "dislike".
+
+Afegim en el butoon les classes en funció de si *l'usuari ha donat like o no*. Es mostrarà el botó like blau o el dislike.
+
+Creem el mètode `getLikes()` per treure el numero de likes hardcoded.
+
+Add property `VideoLike[] $likes` in model `Video`. Same for dislike.
+
+## CHANNEL PAGE
+
+Per mostrar el nom utilitza: `$model->createdBy->username`.
+
+Create `ChannelController`. Create `actionView`.
+
+Create `views\channel\view.php`.
+
+Add rules `'/c/<username>' => '/channel/view'`.
+
+In `video\view.php` create `anchor link` with username.
+
+Anem a ``bootstrap` a per `components/jumbotron`.
+
+Anem a per una `bell button` per `subscribe`.
+
+## SUBSCRIBE / UNSUBSCRIBE
+
+:warning: We need a table:
+```php
+sudo /opt/lampp/bin/php yii migrate/create create_subscriber_table --fields="channel_id:integer(11):foreignKey(user),user_id:integer(11):foreignKey(user),created_at:integer(11)"
+```
+
+:notebook: Practicament el mateix procediment que en el punt del like/dislike.
+
+## MANY TO MANY RELATIONS
+
+```php
+    /**
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getSubscribers()
+    {
+        return $this->hasMany(User::class, ['id' => 'user_id'])
+            ->viaTable('subscriber', ['channel_id' => 'id']);
+    }
+```
+
+## OUTPUT VIDEOS ON CHANNEL PAGE
+
+:warning: Create helper to obtain channelLink more easy:
+```php
+<?php
+
+namespace common\helpers;
+
+use yii\helpers\Url;
+
+class Html
+{
+    public static function channelLink($user, $schema = false)
+    {
+        return \yii\helpers\Html::a(
+            $user->username,
+            Url::to(['/channel/view', 'username' => $user->username],$schema),
+            ['class' => 'text-dark']
+        );
+    }
+}
+
+// Use in view
+<?php echo \common\helpers\Html::channelLink($model->createdBy) ?>
+```
+
+## EMAIL SEND USING MAILTRAP
+https://mailtrap.io/inboxes/1560784/messages#
+
+
+
+
+## SEARCH
+/opt/lampp/bin/php yii migrate/create create_fulltext_index_on_video
+
+/opt/lampp/bin/php yii migrate
+
+## SIMILAR VIDEOS
+
+## HISTORY PAGE
+
+Fixat que la crida es complicadaa si no tenim el context al cap. Fem una join amb una TAULA VIRTUAL que representa els videos amb les seves dates maximes. Volem obtenir el historial  ...
+
+## IMPLEMENT DASHBOARD
+
+## DEBUG BAR
+Un detall d’eficiencia: 
+es fan dues crides molt semblants per els diferents usuaris ...
+
+es podrueix perque iterem els objectes subscription i fem -> user. Per poder fer el mateix pero evitant la crida en el moment d’obtenir els subscriptors hem de fer: 
+
+## RELATION EAGER LOADING
+
+## CACHING
+
+## OVERVIEW, CODE CLEANUP AND IMPROVEMENTS
