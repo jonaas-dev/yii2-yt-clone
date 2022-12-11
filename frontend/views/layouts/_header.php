@@ -7,11 +7,14 @@ use yii\helpers\Url;
 NavBar::begin([
     'brandLabel' => Yii::$app->name,
     'brandUrl' => Yii::$app->homeUrl,
-    'options' => ['class' => 'navbar-expand-lg navbar-light bg-light shadow-sm']
+    'options' => ['class' => 'navbar navbar-expand-lg navbar-light bg-light shadow-sm']
 ]);
 
 if (Yii::$app->user->isGuest) {
-    $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+    $menuItems[] = [
+        'label' => 'Signup',
+        'url' => ['/site/signup']
+    ];
     $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
 } else {
     $menuItems[] = [
@@ -24,19 +27,16 @@ if (Yii::$app->user->isGuest) {
 }
 ?>
 
-<form action="<?php echo Url::to(['video/search']) ?>"
-      class="form-inline my-2 my-lg-0">
-    <input class="form-control mr-sm-2" type="search"
-           placeholder="Search" name="keyword" value="<?php echo Yii::$app->request->get('keyword') ?>">
+<form action="<?php echo Url::to(['video/search']) ?>" class="form-inline my-2 my-lg-0">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" name="keyword" value="<?php echo Yii::$app->request->get('keyword') ?>">
     <button class="btn btn-outline-success my-2 my-sm-0">Search</button>
 </form>
 
 <?php
 echo Nav::widget([
-    'options' => ['class' => 'navbar-nav ml-auto'],
+    'options' => ['class' => 'navbar-nav ml-auto d-flex justify-content-start'],
     'items' => $menuItems,
 ]);
 NavBar::end();
 
 ?>
-

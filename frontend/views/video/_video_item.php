@@ -7,12 +7,10 @@ use yii\helpers\Url;
 
 ?>
 
-<div class="card m-3" style="width: 14rem;">
-    <a href="<?php echo Url::to(['/video/view/', 'id' => $model->video_id])?>">
+<div class="card m-3" style="width: 14rem; border: 1px solid #808080">
+    <a href="<?php echo Url::to(['/video/view/', 'id' => $model->video_id]) ?>">
         <div class="embed-responsive embed-responsive-16by9">
-            <video class="embed-responsive-item"
-                   poster="<?php echo $model->getThumbnailLink() ?>"
-                   src="<?php echo $model->getVideoLink() ?>"></video>
+            <video class="embed-responsive-item" poster="<?php echo $model->getThumbnailLink() ?>" src="<?php echo $model->getVideoLink() ?>"></video>
         </div>
     </a>
     <div class="card-bod p-2">
@@ -25,4 +23,3 @@ use yii\helpers\Url;
         </p>
     </div>
 </div>
-
